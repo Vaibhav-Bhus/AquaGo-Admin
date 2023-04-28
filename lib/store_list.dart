@@ -46,6 +46,10 @@ class _StoreListState extends State<StoreList> {
               ),
             ),
           ),
+          ListTile(
+            title: Text('Store Name'),
+            trailing: Text('Mobile Number'),
+          ),
           StreamBuilder<QuerySnapshot>(
               stream:
                   FirebaseFirestore.instance.collection('Stores').snapshots(),

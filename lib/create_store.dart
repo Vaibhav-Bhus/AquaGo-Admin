@@ -41,6 +41,7 @@ class _AddNewStoreState extends State<AddNewStore> {
         child: Center(
           child: Column(
             children: [
+              
               Container(
                 padding: const EdgeInsets.all(8.0),
                 width: 320,

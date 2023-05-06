@@ -1,77 +1,40 @@
-import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class StoreModel {
-  String? uId;
-  bool? isFormFilled;
-  String? name;
-  String? mob;
-  StoreModel({
-    this.uId,
-    this.isFormFilled,
-    this.name,
-    this.mob,
-  });
+class Seller {
+  String? sellerName;
+  String? sellerUID;
+  String? address;
+  String? sellerAvatarUrl;
+  String? waterType;
+  String? phone;
 
-  StoreModel copyWith({
-    String? uId,
-    bool? isFormFilled,
-    String? name,
-    String? mob,
-  }) {
-    return StoreModel(
-      uId: uId ?? this.uId,
-      isFormFilled: isFormFilled ?? this.isFormFilled,
-      name: name ?? this.name,
-      mob: mob ?? this.mob,
-    );
+  Seller(
+      {this.sellerName,
+      this.sellerUID,
+      this.address,
+      this.sellerAvatarUrl,
+      this.phone,
+      this.waterType});
+
+  Seller.fromJson(Map<String, dynamic> json) {
+    sellerName = json["sellerName"];
+    phone = json["phone"];
+
+    sellerUID = json['sellerUID'];
+    address = json['address'];
+    sellerAvatarUrl = json['sellerAvatarUrl'];
+    waterType = json['waterType'];
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'uId': uId,
-      'isFormFilled': isFormFilled,
-      'name': name,
-      'mob': mob,
-    };
-  }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data["sellerName"] = sellerName;
+    data["phone"] = phone;
+    data['sellerUID'] = sellerUID;
+    data['address'] = address;
+    data['sellerAvatarUrl'] = sellerAvatarUrl;
+    data['waterType'] = waterType;
 
-  factory StoreModel.fromMap(Map<String, dynamic> map) {
-    return StoreModel(
-      uId: map['uId'],
-      isFormFilled: map['isFormFilled'],
-      name: map['name'],
-      mob: map['mob'],
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  StoreModel.fromJson(Map<String, dynamic> json) {
-    uId = json["uId"];
-    isFormFilled = json['isFormFilled'];
-    mob = json['mob'];
-    name = json['name'];
-
-  }
-
-  @override
-  String toString() {
-    return 'StoreModel(uId: $uId, isFormFilled: $isFormFilled, name: $name, mob: $mob)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is StoreModel &&
-        other.uId == uId &&
-        other.isFormFilled == isFormFilled &&
-        other.name == name &&
-        other.mob == mob;
-  }
-
-  @override
-  int get hashCode {
-    return uId.hashCode ^ isFormFilled.hashCode ^ name.hashCode ^ mob.hashCode;
+    return data;
   }
 }

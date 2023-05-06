@@ -1,3 +1,5 @@
+import 'package:admin/custom_toast.dart';
+import 'package:admin/loader.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,20 +19,25 @@ class _AddNewStoreState extends State<AddNewStore> {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   UserCredential? userCredential;
+  bool _loading = false;
   void signUp(String email, String password) async {
     userCredential = await _auth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
     await FirebaseFirestore.instance
-        .collection("Stores")
+        .collection("sellers")
         .doc(userCredential!.user!.uid)
         .set({
       "isFormFilled": false,
-      'uId': userCredential!.user!.uid,
-      "mob": mobController.text.trim(),
-      "name": nameController.text.trim(),
+      "sellerEmail": emailController.text.trim(),
+      'sellerUID': userCredential!.user!.uid,
+      "phone": mobController.text.trim(),
+      "sellerName": nameController.text.trim(),
+      "password": passwordController.text.trim(),
     });
+    _loading = false;
+    print('abc');
     Navigator.pop(context);
   }
 
@@ -41,7 +48,6 @@ class _AddNewStoreState extends State<AddNewStore> {
         child: Center(
           child: Column(
             children: [
-              
               Container(
                 padding: const EdgeInsets.all(8.0),
                 width: 320,
@@ -128,14 +134,16 @@ class _AddNewStoreState extends State<AddNewStore> {
               ),
               InkWell(
                 onTap: () async {
+                  setState(() {
+                    _loading = true;
+                  });
                   try {
                     signUp(emailController.text.trim(),
                         passwordController.text.trim());
-                    //print('hereeeeeeeeeeeeeeeeee');
-
-                    //print('thereeeeeee');
+                    customToast('New Store Added');
                   } catch (e) {
-                    //print(e.toString());
+                    customToast('Something went Wrong....');
+                    _loading = false;
                   }
                 },
                 child: Container(
@@ -152,8 +160,10 @@ class _AddNewStoreState extends State<AddNewStore> {
                           ],
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter)),
-                  child: const Text("SignUp",
-                      style: TextStyle(fontSize: 18, color: Colors.white)),
+                  child: _loading == false
+                      ? const Text("SignUp",
+                          style: TextStyle(fontSize: 18, color: Colors.white))
+                      : buttonLoader,
                 ),
               )
             ],

@@ -52,7 +52,7 @@ class _StoreListState extends State<StoreList> {
           ),
           StreamBuilder<QuerySnapshot>(
               stream:
-                  FirebaseFirestore.instance.collection('Stores').snapshots(),
+                  FirebaseFirestore.instance.collection('sellers').snapshots(),
               builder: (context, snapshot) {
                 return !snapshot.hasData
                     ? const Padding(padding: EdgeInsets.all(8))
@@ -62,7 +62,7 @@ class _StoreListState extends State<StoreList> {
                             shrinkWrap: true,
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: ((context, index) {
-                              StoreModel model = StoreModel.fromJson(
+                              Seller model = Seller.fromJson(
                                 snapshot.data!.docs[index].data()!
                                     as Map<String, dynamic>,
                               );
@@ -74,8 +74,8 @@ class _StoreListState extends State<StoreList> {
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               StoreDetails(model: model))),
-                                  title: Text(model.name.toString()),
-                                  trailing: Text(model.mob.toString()),
+                                  title: Text(model.sellerName.toString()),
+                                  trailing: Text(model.phone.toString()),
                                 ),
                               );
                             })));

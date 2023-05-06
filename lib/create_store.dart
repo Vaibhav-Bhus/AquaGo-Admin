@@ -29,6 +29,7 @@ class _AddNewStoreState extends State<AddNewStore> {
         .collection("sellers")
         .doc(userCredential!.user!.uid)
         .set({
+          "isRatesFilled":'false',
       "isFormFilled": false,
       "sellerEmail": emailController.text.trim(),
       'sellerUID': userCredential!.user!.uid,

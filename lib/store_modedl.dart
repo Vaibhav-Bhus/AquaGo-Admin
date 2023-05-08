@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Seller {
   String? sellerName;
@@ -7,6 +6,8 @@ class Seller {
   String? sellerAvatarUrl;
   String? waterType;
   String? phone;
+  bool? isFormFilled;
+  String? isRatesFilled;
 
   Seller(
       {this.sellerName,
@@ -14,7 +15,9 @@ class Seller {
       this.address,
       this.sellerAvatarUrl,
       this.phone,
-      this.waterType});
+      this.waterType,
+      this.isFormFilled,
+      this.isRatesFilled});
 
   Seller.fromJson(Map<String, dynamic> json) {
     sellerName = json["sellerName"];
@@ -24,10 +27,12 @@ class Seller {
     address = json['address'];
     sellerAvatarUrl = json['sellerAvatarUrl'];
     waterType = json['waterType'];
+    isFormFilled = json['isFormFilled'];
+    isRatesFilled = json['isRatesFilled'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["sellerName"] = sellerName;
     data["phone"] = phone;
     data['sellerUID'] = sellerUID;

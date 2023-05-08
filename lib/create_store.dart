@@ -16,6 +16,7 @@ class _AddNewStoreState extends State<AddNewStore> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController mobController = TextEditingController();
+  TextEditingController waterType = TextEditingController();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   UserCredential? userCredential;
@@ -29,145 +30,179 @@ class _AddNewStoreState extends State<AddNewStore> {
         .collection("sellers")
         .doc(userCredential!.user!.uid)
         .set({
-          "isRatesFilled":'false',
+      "isRatesFilled": 'false',
       "isFormFilled": false,
       "sellerEmail": emailController.text.trim(),
       'sellerUID': userCredential!.user!.uid,
       "phone": mobController.text.trim(),
       "sellerName": nameController.text.trim(),
       "password": passwordController.text.trim(),
+      "waterType": waterType.text.trim(),
     });
     _loading = false;
-    print('abc');
     Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF576CD6),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 1,
+        title: const Text(
+          "Add New Store",
+          style: TextStyle(
+              fontSize: 20, fontWeight: FontWeight.w900, color: Colors.white),
+        ),
+      ),
       body: SafeArea(
         child: Center(
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8.0),
-                width: 320,
-                height: 48,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    gradient: const LinearGradient(
-                        colors: [Color(0xFFE8ECFD), Color(0xFF8898E3)])),
-                child: TextFormField(
-                  controller: nameController,
-                  textDirection: TextDirection.ltr,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    hintText: "  Store Name",
-                    fillColor: Colors.transparent,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Container(
-                padding: const EdgeInsets.all(8.0),
-                width: 320,
-                height: 48,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    gradient: const LinearGradient(
-                        colors: [Color(0xFFE8ECFD), Color(0xFF8898E3)])),
-                child: TextFormField(
-                  controller: mobController,
-                  textDirection: TextDirection.ltr,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    hintText: "  Mobile Number",
-                    fillColor: Colors.transparent,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Container(
-                padding: const EdgeInsets.all(8.0),
-                width: 320,
-                height: 48,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    gradient: const LinearGradient(
-                        colors: [Color(0xFFE8ECFD), Color(0xFF8898E3)])),
-                child: TextFormField(
-                  controller: emailController,
-                  textDirection: TextDirection.ltr,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    hintText: "  Email",
-                    fillColor: Colors.transparent,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Container(
-                padding: const EdgeInsets.all(8.0),
-                width: 320,
-                height: 48,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    gradient: const LinearGradient(
-                        colors: [Color(0xFFE8ECFD), Color(0xFF8898E3)])),
-                child: TextFormField(
-                  controller: passwordController,
-                  textDirection: TextDirection.ltr,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    hintText: "  Password",
-                    fillColor: Colors.transparent,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              InkWell(
-                onTap: () async {
-                  setState(() {
-                    _loading = true;
-                  });
-                  try {
-                    signUp(emailController.text.trim(),
-                        passwordController.text.trim());
-                    customToast('New Store Added');
-                  } catch (e) {
-                    customToast('Something went Wrong....');
-                    _loading = false;
-                  }
-                },
-                child: Container(
-                  width: 170,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(8, 20, 8, 10),
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8.0),
+                  width: 320,
                   height: 48,
-                  alignment: Alignment.center,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(6),
                       gradient: const LinearGradient(
-                          colors: [
-                            Color(0xFF283855),
-                            Color(0xFF2E3F68),
-                            Color(0xFF3B5197)
-                          ],
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter)),
-                  child: _loading == false
-                      ? const Text("SignUp",
-                          style: TextStyle(fontSize: 18, color: Colors.white))
-                      : buttonLoader,
+                          colors: [Color(0xFFE8ECFD), Color(0xFF8898E3)])),
+                  child: TextFormField(
+                    controller: nameController,
+                    textDirection: TextDirection.ltr,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "  Store Name",
+                      fillColor: Colors.transparent,
+                    ),
+                  ),
                 ),
-              )
-            ],
+                const SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(8.0),
+                  width: 320,
+                  height: 48,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      gradient: const LinearGradient(
+                          colors: [Color(0xFFE8ECFD), Color(0xFF8898E3)])),
+                  child: TextFormField(
+                    controller: waterType,
+                    textDirection: TextDirection.ltr,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "  Water Type",
+                      fillColor: Colors.transparent,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(8.0),
+                  width: 320,
+                  height: 48,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      gradient: const LinearGradient(
+                          colors: [Color(0xFFE8ECFD), Color(0xFF8898E3)])),
+                  child: TextFormField(
+                    controller: mobController,
+                    textDirection: TextDirection.ltr,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "  Mobile Number",
+                      fillColor: Colors.transparent,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(8.0),
+                  width: 320,
+                  height: 48,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      gradient: const LinearGradient(
+                          colors: [Color(0xFFE8ECFD), Color(0xFF8898E3)])),
+                  child: TextFormField(
+                    controller: emailController,
+                    textDirection: TextDirection.ltr,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "  Email",
+                      fillColor: Colors.transparent,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(8.0),
+                  width: 320,
+                  height: 48,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      gradient: const LinearGradient(
+                          colors: [Color(0xFFE8ECFD), Color(0xFF8898E3)])),
+                  child: TextFormField(
+                    controller: passwordController,
+                    textDirection: TextDirection.ltr,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "  Password",
+                      fillColor: Colors.transparent,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                InkWell(
+                  onTap: () async {
+                    setState(() {
+                      _loading = true;
+                    });
+                    try {
+                      signUp(emailController.text.trim(),
+                          passwordController.text.trim());
+                      customToast('New Store Added');
+                    } catch (e) {
+                      customToast('Something went Wrong....');
+                      _loading = false;
+                    }
+                  },
+                  child: Container(
+                    width: 170,
+                    height: 48,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        gradient: const LinearGradient(
+                            colors: [
+                              Color(0xFF283855),
+                              Color(0xFF2E3F68),
+                              Color(0xFF3B5197)
+                            ],
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter)),
+                    child: _loading == false
+                        ? const Text("SignUp",
+                            style: TextStyle(fontSize: 18, color: Colors.white))
+                        : buttonLoader,
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

@@ -19,8 +19,9 @@ class _StoreListState extends State<StoreList> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 1,
+        centerTitle: true,
         title: const Text(
-          "Admin",
+          "AquaGo Admin",
           style: TextStyle(
               fontSize: 20, fontWeight: FontWeight.w900, color: Colors.white),
         ),
@@ -130,7 +131,8 @@ class _StoreListState extends State<StoreList> {
                                     ),
                                   ),
                                 );
-                              })));
+                              })),
+                        );
                 })
           ],
         ),

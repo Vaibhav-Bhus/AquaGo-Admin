@@ -1,4 +1,3 @@
-
 class Seller {
   String? sellerName;
   String? sellerUID;
@@ -8,6 +7,7 @@ class Seller {
   String? phone;
   bool? isFormFilled;
   String? isRatesFilled;
+  String? userCreated;
 
   Seller(
       {this.sellerName,
@@ -22,6 +22,7 @@ class Seller {
   Seller.fromJson(Map<String, dynamic> json) {
     sellerName = json["sellerName"];
     phone = json["phone"];
+    userCreated = json['userCreated'];
 
     sellerUID = json['sellerUID'];
     address = json['address'];

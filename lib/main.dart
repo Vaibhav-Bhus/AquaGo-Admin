@@ -1,4 +1,3 @@
-
 import 'package:admin/store_list.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -22,34 +21,36 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Container(
-        decoration: const BoxDecoration(
-            gradient: RadialGradient(
-          colors: [
-            Color(0xFF283855),
-            Color(0xFF2E3F68),
-            Color(0xFF3B5197),
-          ],
-        )),
-        child: SplashScreenView(
-          navigateRoute: const StoreList(),
-          duration: 4500,
-          imageSize: 450,
-          // speed: 1000,
-          pageRouteTransition: PageRouteTransition.SlideTransition,
-          imageSrc: "assets/animation.gif",
-          text: 'AquaGo Admin',
-          textType: TextType.ColorizeAnimationText,
-          textStyle: const TextStyle(
-            fontSize: 40,
-            letterSpacing: 4,
+          decoration: const BoxDecoration(
+              gradient: RadialGradient(
+            colors: [
+              Color(0xFF283855),
+              Color(0xFF2E3F68),
+              Color(0xFF3B5197),
+            ],
+          )),
+          child: StoreList()
+
+          // SplashScreenView(
+          //   navigateRoute: const StoreList(),
+          //   duration: 4500,
+          //   imageSize: 450,
+          //   // speed: 1000,
+          //   pageRouteTransition: PageRouteTransition.SlideTransition,
+          //   imageSrc: "assets/animation.gif",
+          //   text: 'AquaGo Admin',
+          //   textType: TextType.ColorizeAnimationText,
+          //   textStyle: const TextStyle(
+          //     fontSize: 40,
+          //     letterSpacing: 4,
+          //   ),
+          //   colors: const [
+          //     Color(0xFF1cd5e0),
+          //     Color(0xFF000046),
+          //   ],
+          //   backgroundColor: Colors.transparent,
+          // ),
           ),
-          colors: const [
-            Color(0xFF1cd5e0),
-            Color(0xFF000046),
-          ],
-          backgroundColor: Colors.transparent,
-        ),
-      ),
       debugShowCheckedModeBanner: false,
       title: 'Admin',
     );

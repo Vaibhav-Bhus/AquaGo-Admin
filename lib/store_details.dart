@@ -132,7 +132,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                 height: 5,
                 color: Colors.white,
               ),
-              ListTile(
+              widget.model.isFormFilled == true?ListTile(
                 title: const Text(
                   'Address',
                   style: TextStyle(
@@ -147,7 +147,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                       fontWeight: FontWeight.w500,
                       color: Colors.white),
                 ),
-              ),
+              ):Container(),
             ],
           ),
         ),

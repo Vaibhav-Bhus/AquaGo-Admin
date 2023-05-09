@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:admin/text_style.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class StoreDetails extends StatefulWidget {
@@ -12,6 +14,66 @@ class StoreDetails extends StatefulWidget {
 }
 
 class _StoreDetailsState extends State<StoreDetails> {
+  var jar, bottle;
+  getDetails() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('sellers')
+          .doc(widget.model.sellerUID)
+          .collection('JarQuantity')
+          .doc('JarQuantity')
+          .get()
+          .then((value) {
+        print(value.data()!);
+        setState(() {
+          bottle = value.data()!['bottle'];
+          jar = value.data()!['jar'];
+          print(bottle);
+          print(jar);
+        });
+      });
+    } catch (e) {}
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getDetails();
+  }
+
+  Future<void> _showMyDialog(String id) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('UID'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(id),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              child: const Center(
+                child: Text("Ok"),
+              ),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.red,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,11 +82,7 @@ class _StoreDetailsState extends State<StoreDetails> {
         backgroundColor: Colors.transparent,
         elevation: 1,
         centerTitle: true,
-        title: Text(
-          widget.model.sellerName,
-          style: const TextStyle(
-              fontSize: 20, fontWeight: FontWeight.w900, color: Colors.white),
-        ),
+        title: Text(widget.model.sellerName, style: appBarTextStyle),
       ),
       body: SafeArea(
           child: SingleChildScrollView(
@@ -36,120 +94,130 @@ class _StoreDetailsState extends State<StoreDetails> {
                 ListTile(
                   title: Text(
                     'Mobile Number',
-                    style: titleStyle,
+                    style: contentStyle,
                   ),
-                  trailing: Text(widget.model.phone, style: titleStyle),
+                  trailing: Text(widget.model.phone, style: contentStyle),
                 ),
-                const Divider(
-                  height: 5,
-                  color: Colors.white,
-                ),
-                ListTile(
-                  title: const Text('Uid', style: titleStyle),
-                  trailing: Text(widget.model.sellerUID, style: titleStyle),
-                ),
-                const Divider(
-                  height: 5,
-                  color: Colors.white,
+                Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: const Divider(
+                    height: 5,
+                    color: Colors.white,
+                  ),
                 ),
                 ListTile(
+                  onTap: () => _showMyDialog(widget.model.sellerUID),
                   title: const Text(
-                    'Form Status',
-                    style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white),
+                    'Uid',
+                    style: contentStyle,
                   ),
-                  trailing: Text(
-                    widget.model.isFormFilled ? 'Filled' : 'Not Filled',
-                    style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white),
-                  ),
-                ),
-                const Divider(
-                  height: 5,
-                  color: Colors.white,
-                ),
-                ListTile(
-                  title: const Text(
-                    'Rates Status',
-                    style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white),
-                  ),
-                  trailing: Text(
-                    widget.model.isRatesFilled == 'true'
-                        ? 'Filled'
-                        : 'Not Filled',
-                    style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white),
+                  trailing: Container(
+                    alignment: Alignment.centerRight,
+                    width: MediaQuery.of(context).size.width * 0.50,
+                    child: Text(
+                      widget.model.sellerUID,
+                      style: contentStyle,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ),
-                const Divider(
-                  height: 5,
-                  color: Colors.white,
+                Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: const Divider(
+                    height: 5,
+                    color: Colors.white,
+                  ),
                 ),
                 ListTile(
-                  title: const Text(
-                    'Water Type',
-                    style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white),
-                  ),
+                  title: const Text('Form Status', style: contentStyle),
                   trailing: Text(
-                    widget.model.waterType,
-                    style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white),
-                  ),
+                      widget.model.isFormFilled ? 'Filled' : 'Not Filled',
+                      style: contentStyle),
                 ),
-                const Divider(
-                  height: 5,
-                  color: Colors.white,
+                Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: const Divider(
+                    height: 5,
+                    color: Colors.white,
+                  ),
                 ),
                 ListTile(
-                  title: const Text(
-                    'Created Time',
-                    style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white),
-                  ),
+                  title: const Text('Rates Status', style: contentStyle),
                   trailing: Text(
-                    widget.model.userCreated ?? '0',
-                    style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white),
+                      widget.model.isRatesFilled == 'true'
+                          ? 'Filled'
+                          : 'Not Filled',
+                      style: contentStyle),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: const Divider(
+                    height: 5,
+                    color: Colors.white,
                   ),
                 ),
-                const Divider(
-                  height: 5,
-                  color: Colors.white,
+                ListTile(
+                  title: const Text('Water Type', style: contentStyle),
+                  trailing: Text(widget.model.waterType, style: contentStyle),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: const Divider(
+                    height: 5,
+                    color: Colors.white,
+                  ),
+                ),
+                ListTile(
+                  title: const Text('Created Time', style: contentStyle),
+                  trailing: Text(widget.model.userCreated ?? '0',
+                      style: contentStyle),
+                ),
+                widget.model.isRatesFilled == 'true'
+                    ? Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: const Divider(
+                          height: 5,
+                          color: Colors.white,
+                        ),
+                      )
+                    : Container(),
+                widget.model.isRatesFilled == 'true'
+                    ? ListTile(
+                        title: const Text('Jar Quantity', style: contentStyle),
+                        trailing: Text(jar.toString(), style: contentStyle),
+                      )
+                    : Container(),
+                widget.model.isRatesFilled == 'true'
+                    ? Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: const Divider(
+                          height: 5,
+                          color: Colors.white,
+                        ),
+                      )
+                    : Container(),
+                widget.model.isRatesFilled == 'true'
+                    ? ListTile(
+                        title:
+                            const Text('Bottle Quantity', style: contentStyle),
+                        trailing: Text(bottle.toString(), style: contentStyle),
+                      )
+                    : Container(),
+                Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: const Divider(
+                    height: 5,
+                    color: Colors.white,
+                  ),
                 ),
                 widget.model.isFormFilled == true
                     ? ListTile(
-                        title: const Text(
-                          'Address',
-                          style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white),
+                        title: Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: const Text('Address', style: contentStyle),
                         ),
-                        subtitle: Text(
-                          widget.model.address,
-                          style: const TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white),
-                        ),
+                        subtitle:
+                            Text(widget.model.address, style: contentStyle),
                       )
                     : Container(),
               ],

@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:admin/custom_toast.dart';
 import 'package:admin/error_dialog.dart';
 import 'package:admin/loader.dart';
 import 'package:admin/store_list.dart';
@@ -112,7 +111,8 @@ class _AddNewStoreState extends State<AddNewStore> {
           "sellerName": nameController.text.trim(),
           "password": passwordController.text.trim(),
           "waterType": waterType.text.trim(),
-          "userCreated":DateTime.now().toString(),
+          "userCreated": DateTime.now().toString(),
+          'sellerMoney': 0.0
         });
         showDialog(
             context: context,

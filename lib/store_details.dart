@@ -1,7 +1,11 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:admin/text_style.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'error_dialog.dart';
 
 class StoreDetails extends StatefulWidget {
   final model;
@@ -134,6 +138,26 @@ class _StoreDetailsState extends State<StoreDetails> {
                   height: 5,
                   color: Colors.white,
                 ),
+                ListTile(
+                  title: const Text(
+                    'Remaining Payment',
+                    style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white),
+                  ),
+                  trailing: Text(
+                    widget.model.sellerMoney.toString(),
+                    style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white),
+                  ),
+                ),
+                const Divider(
+                  height: 5,
+                  color: Colors.white,
+                ),
                 widget.model.isFormFilled == true
                     ? ListTile(
                         title: const Text(
@@ -152,6 +176,43 @@ class _StoreDetailsState extends State<StoreDetails> {
                         ),
                       )
                     : Container(),
+                SizedBox(
+                  height: 10,
+                ),
+                InkWell(
+                  onTap: () async {
+                    try {
+                      await FirebaseFirestore.instance
+                          .collection("sellers")
+                          .doc(widget.model.sellerUID)
+                          .update({'sellerMoney': 0.0});
+                    } catch (e) {
+                      showDialog(
+                          context: context,
+                          builder: (c) {
+                            return ErrorDialog(
+                              message: "Something went wrong",
+                            );
+                          });
+                    }
+                  },
+                  child: Container(
+                      width: 170,
+                      height: 48,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          gradient: const LinearGradient(
+                              colors: [
+                                Color(0xFF283855),
+                                Color(0xFF2E3F68),
+                                Color(0xFF3B5197)
+                              ],
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter)),
+                      child: const Text("Payout",
+                          style: TextStyle(fontSize: 18, color: Colors.white))),
+                )
               ],
             ),
           ),
@@ -159,4 +220,6 @@ class _StoreDetailsState extends State<StoreDetails> {
       )),
     );
   }
+
+  double? sellerMoney;
 }

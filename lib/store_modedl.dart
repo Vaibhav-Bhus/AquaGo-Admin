@@ -5,6 +5,7 @@ class Seller {
   String? sellerAvatarUrl;
   String? waterType;
   String? phone;
+  double? sellerMoney;
   bool? isFormFilled;
   String? isRatesFilled;
   String? userCreated;
@@ -16,6 +17,7 @@ class Seller {
       this.sellerAvatarUrl,
       this.phone,
       this.waterType,
+      this.sellerMoney,
       this.isFormFilled,
       this.isRatesFilled});
 
@@ -23,8 +25,8 @@ class Seller {
     sellerName = json["sellerName"];
     phone = json["phone"];
     userCreated = json['userCreated'];
-
-    sellerUID = json['sellerUID'];
+    sellerMoney = json['sellerMoney'].toDouble();
+ sellerUID = json['sellerUID'];
     address = json['address'];
     sellerAvatarUrl = json['sellerAvatarUrl'];
     waterType = json['waterType'];

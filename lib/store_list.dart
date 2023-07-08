@@ -1,6 +1,7 @@
 import 'package:admin/create_store.dart';
 import 'package:admin/store_details.dart';
 import 'package:admin/store_modedl.dart';
+import 'package:admin/text_style.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -20,11 +21,7 @@ class _StoreListState extends State<StoreList> {
         backgroundColor: Colors.transparent,
         elevation: 1,
         centerTitle: true,
-        title: const Text(
-          "AquaGo Admin",
-          style: TextStyle(
-              fontSize: 20, fontWeight: FontWeight.w900, color: Colors.white),
-        ),
+        title: const Text("AquaGo Admin", style: appBarTextStyle),
         actions: [
           IconButton(
               onPressed: () {
@@ -36,8 +33,11 @@ class _StoreListState extends State<StoreList> {
               icon: const Icon(
                 Icons.add,
                 color: Colors.white,
-                size: 30,
-              ))
+                size: 35,
+              )),
+          SizedBox(
+            width: 10,
+          )
         ],
       ),
       body: SafeArea(
@@ -74,20 +74,8 @@ class _StoreListState extends State<StoreList> {
             //   ),
             // ),
             const ListTile(
-              title: Text(
-                'Store Name',
-                style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white),
-              ),
-              trailing: Text(
-                'Mobile Number',
-                style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white),
-              ),
+              title: Text('Store Name', style: titleStyle),
+              trailing: Text('Mobile Number', style: titleStyle),
             ),
             StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
@@ -95,43 +83,36 @@ class _StoreListState extends State<StoreList> {
                     .snapshots(),
                 builder: (context, snapshot) {
                   return !snapshot.hasData
-                      ? const Padding(padding: EdgeInsets.all(8))
+                      ? const Center(
+                          child: CircularProgressIndicator(color: Colors.white),
+                        )
                       : Expanded(
                           child: ListView.builder(
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              itemCount: snapshot.data!.docs.length,
-                              itemBuilder: ((context, index) {
-                                Seller model = Seller.fromJson(
-                                  snapshot.data!.docs[index].data()!
-                                      as Map<String, dynamic>,
-                                );
-                                return Card(
-                                  elevation: 1,
-                                  color: Colors.transparent,
-                                  child: ListTile(
-                                    onTap: () => Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                StoreDetails(model: model))),
-                                    title: Text(
-                                      model.sellerName.toString(),
-                                      style: const TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.white),
-                                    ),
-                                    trailing: Text(
-                                      model.phone.toString(),
-                                      style: const TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.white),
-                                    ),
-                                  ),
-                                );
-                              })),
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: snapshot.data!.docs.length,
+                            itemBuilder: ((context, index) {
+                              Seller model = Seller.fromJson(
+                                snapshot.data!.docs[index].data()!
+                                    as Map<String, dynamic>,
+                              );
+                              return Card(
+                                elevation: 1,
+                                color: Colors.transparent,
+                                child: ListTile(
+                                  onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              StoreDetails(model: model))),
+                                  title: Text(model.sellerName.toString(),
+                                      style: contentStyle),
+                                  trailing: Text(model.phone.toString(),
+                                      style: contentStyle),
+                                ),
+                              );
+                            }),
+                          ),
                         );
                 })
           ],
